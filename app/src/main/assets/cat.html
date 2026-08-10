@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>布偶猫</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:transparent;overflow:hidden;
+  width:100vw;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  user-select:none;-webkit-user-select:none;
+}
+.cat{
+  width:100%;height:100%;
+  transition:transform .15s;position:relative;
+}
+.cat.pet{transform:scale(1.08)}
+.cat.love .heart{opacity:1;animation:floatUp 1.2s ease-out forwards}
+.cat.annoyed .hidden-face{opacity:1}
+.cat.annoyed .normal-face{opacity:.3}
+.cat.sleeping .sleepy-overlay{opacity:1}
+.cat.sleeping .normal-face{opacity:.2}
+.cat.sleeping .tail-group{animation-duration:6s}
+.cat.sleeping .body-breath{animation-duration:5s}
+svg{width:100%;height:100%}
+
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}95%{transform:scaleY(.05)}}
+.eye-l,.eye-r{transform-origin:center;animation:blink 4s infinite}
+.eye-r{animation-delay:.15s}
+
+@keyframes tail{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(15deg)}}
+.tail-group{transform-origin:420px 560px;animation:tail 3s ease-in-out infinite}
+
+@keyframes earL{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg)}}
+@keyframes earR{0%,100%{transform:rotate(0)}50%{transform:rotate(8deg)}}
+.ear-left{transform-origin:250px 100px;animation:earL 5s ease-in-out infinite}
+.ear-right{transform-origin:420px 100px;animation:earR 5s ease-in-out infinite}
+
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
+.body-breath{transform-origin:335px 340px;animation:breathe 3s ease-in-out infinite}
+
+@keyframes floatUp{0%{transform:translateY(0) scale(.5);opacity:1}100%{transform:translateY(-80px) scale(1.2);opacity:0}}
+@keyframes zzz{0%{opacity:0;transform:translate(0,0) scale(.5)}50%{opacity:1}100%{opacity:0;transform:translate(15px,-30px) scale(1)}}
+
+.hidden-face{opacity:0;transition:opacity .3s}
+.heart{opacity:0;transition:all .5s ease-out}
+.sleepy-overlay{opacity:0;transition:opacity 1s}
+.z{opacity:0}
+.cat.sleeping .z1{animation:zzz 3s infinite}
+.cat.sleeping .z2{animation:zzz 3s .8s infinite}
+.cat.sleeping .z3{animation:zzz 3s 1.6s infinite}
+
+.bubble{
+  position:absolute;background:white;border-radius:16px;
+  padding:8px 14px;font-size:14px;color:#555;
+  top:-55px;left:50%;transform:translateX(-50%);
+  opacity:0;box-shadow:0 2px 12px rgba(0,0,0,.1);
+  white-space:nowrap;pointer-events:none;
+  transition:opacity .2s;z-index:10;
+}
+.bubble.show{opacity:1}
+.bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid white}
+</style>
+</head>
+<body>
+
+<div class="cat" id="cat">
+  <div class="bubble" id="bubble"></div>
+  <svg viewBox="0 0 670 620" xmlns="http://www.w3.org/2000/svg">
+    <g class="tail-group">
+      <path d="M420 540 Q480 500 510 540 Q530 570 500 590 Q470 600 430 570Z" fill="#D4C5B9" stroke="#B8A89A" stroke-width="2"/>
+      <path d="M500 590 Q520 610 490 620 Q460 610 470 590Z" fill="#F5EDE6"/>
+    </g>
+    <ellipse class="body-breath" cx="335" cy="380" rx="120" ry="140" fill="#F5EDE6"/>
+    <ellipse cx="335" cy="400" rx="70" ry="90" fill="#FFFBF7"/>
+    <ellipse cx="260" cy="510" rx="28" ry="18" fill="#F5EDE6"/>
+    <ellipse cx="410" cy="510" rx="28" ry="18" fill="#F5EDE6"/>
+    <ellipse cx="255" cy="515" rx="10" ry="8" fill="#D4C5B9"/>
+    <ellipse cx="415" cy="515" rx="10" ry="8" fill="#D4C5B9"/>
+    <ellipse cx="335" cy="180" rx="95" ry="85" fill="#F5EDE6"/>
+    <g class="ear-left">
+      <polygon points="250,115 220,30 290,90" fill="#D4C5B9"/>
+      <polygon points="250,110 230,50 280,90" fill="#F0C0C0"/>
+    </g>
+    <g class="ear-right">
+      <polygon points="420,115 450,30 380,90" fill="#D4C5B9"/>
+      <polygon points="420,110 440,50 390,90" fill="#F0C0C0"/>
+    </g>
+    <ellipse cx="335" cy="195" rx="75" ry="55" fill="#D4C5B9"/>
+    <g class="normal-face">
+      <ellipse class="eye-l" cx="305" cy="175" rx="16" ry="18" fill="#5B9BD5"/>
+      <ellipse class="eye-r" cx="365" cy="175" rx="16" ry="18" fill="#5B9BD5"/>
+      <ellipse cx="305" cy="175" rx="10" ry="14" fill="#1A1A2E"/>
+      <ellipse cx="365" cy="175" rx="10" ry="14" fill="#1A1A2E"/>
+      <circle cx="300" cy="168" r="4" fill="white" opacity=".8"/>
+      <circle cx="360" cy="168" r="4" fill="white" opacity=".8"/>
+    </g>
+    <g class="hidden-face">
+      <path d="M286 175 Q305 162 324 175" fill="none" stroke="#1A1A2E" stroke-width="3" stroke-linecap="round"/>
+      <path d="M346 175 Q365 162 384 175" fill="none" stroke="#1A1A2E" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <ellipse cx="335" cy="200" rx="7" ry="5" fill="#F0A0A0"/>
+    <path d="M335 205 L335 215" stroke="#B8A89A" stroke-width="2"/>
+    <path d="M320 215 Q335 225 335 215" fill="none" stroke="#B8A89A" stroke-width="2"/>
+    <path d="M350 215 Q335 225 335 215" fill="none" stroke="#B8A89A" stroke-width="2"/>
+    <line x1="280" y1="195" x2="220" y2="185" stroke="#CCC" stroke-width="1.5"/>
+    <line x1="280" y1="205" x2="215" y2="210" stroke="#CCC" stroke-width="1.5"/>
+    <line x1="390" y1="195" x2="450" y2="185" stroke="#CCC" stroke-width="1.5"/>
+    <line x1="390" y1="205" x2="455" y2="210" stroke="#CCC" stroke-width="1.5"/>
+    <g class="heart" transform="translate(280,380)">
+      <path d="M0 10 A10 10 0 0 1 20 10 A10 10 0 0 1 40 10 Q40 25 20 38 Q0 25 0 10Z" fill="#FF6B8A"/>
+    </g>
+    <g class="sleepy-overlay">
+      <text class="z z1" x="420" y="120" font-size="18" fill="#888" font-family="sans-serif">z</text>
+      <text class="z z2" x="440" y="100" font-size="14" fill="#999" font-family="sans-serif">z</text>
+      <text class="z z3" x="455" y="80" font-size="11" fill="#aaa" font-family="sans-serif">z</text>
+    </g>
+  </svg>
+</div>
+
+<script>
+const cat=document.getElementById('cat');
+const bubble=document.getElementById('bubble');
+let bubbleTimer=null;
+
+// 原生桥接方法
+function showBubble(txt){
+  if(!txt)return;
+  bubble.textContent=txt;
+  bubble.classList.add('show');
+  clearTimeout(bubbleTimer);
+  bubbleTimer=setTimeout(()=>bubble.classList.remove('show'),1800);
+}
+
+function showLove(){
+  cat.classList.add('love');
+  showBubble('喜欢你~');
+  setTimeout(()=>cat.classList.remove('love'),1200);
+}
+
+function showExcited(){
+  cat.classList.add('pet');
+  showBubble('喵喵喵！');
+  setTimeout(()=>cat.classList.remove('pet'),600);
+}
+
+function showAnnoyed(){
+  cat.classList.add('annoyed');
+  showBubble('哼！');
+  setTimeout(()=>cat.classList.remove('annoyed'),800);
+}
+
+function showSleepy(){
+  cat.classList.add('annoyed');
+  showBubble('😾');
+  setTimeout(()=>cat.classList.remove('annoyed'),1000);
+}
+
+function goSleep(){
+  cat.classList.add('sleeping');
+}
+
+function wakeUp(msg){
+  cat.classList.remove('sleeping');
+  if(msg)showBubble(msg);
+}
+
+function playFling(){}
+
+// 通知原生侧已就绪
+if(typeof PetBridge!=='undefined'){PetBridge.onPetReady();}
+</script>
+</body>
+</html>
